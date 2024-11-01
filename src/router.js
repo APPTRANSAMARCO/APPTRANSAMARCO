@@ -27,19 +27,19 @@ const routes = [
             if (user) {
                 const db = getDatabase();
                 const userRef = ref(db, 'users/' + user.uid);
-                
+
                 get(userRef).then((snapshot) => {
-                if (snapshot.exists()) {
-                    const userData = snapshot.val();
-                    if (userData.role === 'admin') {
-                    next(); // Permitir acceso si es admin
+                    if (snapshot.exists()) {
+                        const userData = snapshot.val();
+                        if (userData.role === 'admin') {
+                            next(); // Permitir acceso si es admin
+                        } else {
+                            alert('Acceso denegado. Solo administradores pueden acceder a esta página.');
+                            next('/login'); // Redirigir a login
+                        }
                     } else {
-                    alert('Acceso denegado. Solo administradores pueden acceder a esta página.');
-                    next('/login'); // Redirigir a login
+                        next('/login');
                     }
-                } else {
-                    next('/login');
-                }
                 });
             } else {
                 next('/login'); // Redirigir a login si no hay usuario autenticado
@@ -55,26 +55,26 @@ const routes = [
             if (user) {
                 const db = getDatabase();
                 const userRef = ref(db, 'users/' + user.uid);
-                
+
                 get(userRef).then((snapshot) => {
-                if (snapshot.exists()) {
-                    const userData = snapshot.val();
-                    if (userData.isActive === 'true') {
-                    next(); // Permitir acceso si es admin
+                    if (snapshot.exists()) {
+                        const userData = snapshot.val();
+                        if (userData.isActive === 'false') {
+                            next(); // Permitir si esta habilitado
+                        } else {
+                            alert('Acceso denegado. tu cuenta no esta habilitada.');
+                            next('/login'); // Redirigir a login
+                        }
                     } else {
-                    alert('Acceso denegado. tu cuenta no esta habilitada.');
-                    next('/login'); // Redirigir a login
+                        next('/login');
                     }
-                } else {
-                    next('/login');
-                }
                 });
             } else {
                 next('/login'); // Redirigir a login si no hay usuario autenticado
             }
         }
     },
-    
+
     {
         path: '/panelAdmin',
         name: 'PanelAdmin',
@@ -84,19 +84,19 @@ const routes = [
             if (user) {
                 const db = getDatabase();
                 const userRef = ref(db, 'users/' + user.uid);
-                
+
                 get(userRef).then((snapshot) => {
-                if (snapshot.exists()) {
-                    const userData = snapshot.val();
-                    if (userData.role === 'admin') {
-                    next(); // Permitir acceso si es admin
+                    if (snapshot.exists()) {
+                        const userData = snapshot.val();
+                        if (userData.role === 'admin') {
+                            next(); // Permitir acceso si es admin
+                        } else {
+                            alert('Acceso denegado. Solo administradores pueden acceder a esta página.');
+                            next('/login'); // Redirigir a login
+                        }
                     } else {
-                    alert('Acceso denegado. Solo administradores pueden acceder a esta página.');
-                    next('/login'); // Redirigir a login
+                        next('/login');
                     }
-                } else {
-                    next('/login');
-                }
                 });
             } else {
                 next('/login'); // Redirigir a login si no hay usuario autenticado
@@ -107,57 +107,11 @@ const routes = [
         path: '/editUser',
         name: 'EditUser',
         component: EditUser,
-        beforeEnter: (to, from, next) => {
-            const user = auth.currentUser;
-            if (user) {
-                const db = getDatabase();
-                const userRef = ref(db, 'users/' + user.uid);
-                
-                get(userRef).then((snapshot) => {
-                if (snapshot.exists()) {
-                    const userData = snapshot.val();
-                    if (userData.isActive === 'true') {
-                    next(); // Permitir acceso si es admin
-                    } else {
-                    alert('Acceso denegado. tu cuenta no esta habilitada.');
-                    next('/login'); // Redirigir a login
-                    }
-                } else {
-                    next('/login');
-                }
-                });
-            } else {
-                next('/login'); // Redirigir a login si no hay usuario autenticado
-            }
-        }
     },
     {
         path: '/miPerfil',
         name: 'MiPerfil',
         component: MiPerfil,
-        beforeEnter: (to, from, next) => {
-            const user = auth.currentUser;
-            if (user) {
-                const db = getDatabase();
-                const userRef = ref(db, 'users/' + user.uid);
-                
-                get(userRef).then((snapshot) => {
-                if (snapshot.exists()) {
-                    const userData = snapshot.val();
-                    if (userData.isActive === 'true') {
-                    next(); // Permitir acceso si es admin
-                    } else {
-                    alert('Acceso denegado. tu cuenta no esta habilitada.');
-                    next('/login'); // Redirigir a login
-                    }
-                } else {
-                    next('/login');
-                }
-                });
-            } else {
-                next('/login'); // Redirigir a login si no hay usuario autenticado
-            }
-        }
     },
     {
         path: '/visualizarUsuarios',
