@@ -50,29 +50,7 @@ const routes = [
         path: '/inicio',
         name: 'Inicio',
         component: Inicio,
-        beforeEnter: (to, from, next) => {
-            const user = auth.currentUser;
-            if (user) {
-                const db = getDatabase();
-                const userRef = ref(db, 'users/' + user.uid);
-
-                get(userRef).then((snapshot) => {
-                    if (snapshot.exists()) {
-                        const userData = snapshot.val();
-                        if (userData.isActive === true) {
-                            next(); // Permitir si esta habilitado
-                        } else {
-                            alert('Acceso denegado. tu cuenta no esta habilitada.');
-                            next('/login'); // Redirigir a login
-                        }
-                    } else {
-                        next('/login');
-                    }
-                });
-            } else {
-                next('/login'); // Redirigir a login si no hay usuario autenticado
-            }
-        }
+        
     },
 
     {
