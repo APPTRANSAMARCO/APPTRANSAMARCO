@@ -59,7 +59,7 @@ const routes = [
                 get(userRef).then((snapshot) => {
                     if (snapshot.exists()) {
                         const userData = snapshot.val();
-                        if (userData.isActive === 'false') {
+                        if (userData.isActive === true) {
                             next(); // Permitir si esta habilitado
                         } else {
                             alert('Acceso denegado. tu cuenta no esta habilitada.');
