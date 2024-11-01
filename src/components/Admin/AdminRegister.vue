@@ -133,18 +133,22 @@ export default {
             try {
                 const emailExists = await this.checkEmailExists(this.email);
                 if (emailExists) {
-                    alert('El correo electrónico ya está registrado. Por favor, utiliza otro.');
+                    alert('El numero de cuenta ya está registrado. Por favor, utiliza otro.');
                     return;
                 }
 
+                // Crear usuario en Firebase Auth
                 const userCredential = await createUserWithEmailAndPassword(auth, this.email + '@gmail.com', this.password);
                 const userId = userCredential.user.uid;
-                const db = getDatabase();
 
-                // Sube archivos y obtiene URLs
+                // Cerrar sesión inmediatamente después del registro
+                await auth.signOut();
+
+                // Subir archivos y obtener URLs
                 const fileUrls = await this.uploadFiles(userId);
 
-                // Guardamos el usuario en Realtime Database
+                // Guardar el usuario en Realtime Database
+                const db = getDatabase();
                 await set(ref(db, 'users/' + userId), {
                     email: this.email,
                     name: this.name,
@@ -159,10 +163,27 @@ export default {
                     photo_tarjeton: fileUrls.photo_tarjeton || ''
                 });
 
-                alert('Usuario registrado exitosamente!');
+                // Mostrar mensaje de éxito sin redirigir ni loguear
+                alert('Usuario registrado exitosamente. Por favor, inicia sesión manualmente.');
+                
+                // Limpiar el formulario después del registro
+                this.email = '';
+                this.name = '';
+                this.surname = '';
+                this.address = '';
+                this.phone = '';
+                this.password = '';
+                this.role = '';
+                this.files = {
+                    photo_licence: null,
+                    photo_document: null,
+                    photo_conductor: null,
+                    photo_tarjeton: null
+                };
+                
             } catch (error) {
                 if (error.code === 'auth/email-already-in-use') {
-                    alert('Numero de cuenta ya está registrado. Por favor, utiliza otro.');
+                    alert('Número de cuenta ya está registrado. Por favor, utiliza otro.');
                 } else if (error.code === 'auth/invalid-email') {
                     alert('Por favor, verifica e intenta de nuevo.');
                 } else if (error.code === 'auth/weak-password') {
@@ -173,6 +194,7 @@ export default {
                 }
             }
         }
+
 
 
     }
