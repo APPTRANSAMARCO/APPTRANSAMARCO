@@ -49,7 +49,30 @@ const routes = [
     {
         path: '/inicio',
         name: 'Inicio',
-        component: Inicio
+        component: Inicio,
+        beforeEnter: (to, from, next) => {
+            const user = auth.currentUser;
+            if (user) {
+                const db = getDatabase();
+                const userRef = ref(db, 'users/' + user.uid);
+                
+                get(userRef).then((snapshot) => {
+                if (snapshot.exists()) {
+                    const userData = snapshot.val();
+                    if (userData.isActive === 'true') {
+                    next(); // Permitir acceso si es admin
+                    } else {
+                    alert('Acceso denegado. tu cuenta no esta habilitada.');
+                    next('/login'); // Redirigir a login
+                    }
+                } else {
+                    next('/login');
+                }
+                });
+            } else {
+                next('/login'); // Redirigir a login si no hay usuario autenticado
+            }
+        }
     },
     
     {
@@ -83,12 +106,58 @@ const routes = [
     {
         path: '/editUser',
         name: 'EditUser',
-        component: EditUser
+        component: EditUser,
+        beforeEnter: (to, from, next) => {
+            const user = auth.currentUser;
+            if (user) {
+                const db = getDatabase();
+                const userRef = ref(db, 'users/' + user.uid);
+                
+                get(userRef).then((snapshot) => {
+                if (snapshot.exists()) {
+                    const userData = snapshot.val();
+                    if (userData.isActive === 'true') {
+                    next(); // Permitir acceso si es admin
+                    } else {
+                    alert('Acceso denegado. tu cuenta no esta habilitada.');
+                    next('/login'); // Redirigir a login
+                    }
+                } else {
+                    next('/login');
+                }
+                });
+            } else {
+                next('/login'); // Redirigir a login si no hay usuario autenticado
+            }
+        }
     },
     {
         path: '/miPerfil',
         name: 'MiPerfil',
-        component: MiPerfil
+        component: MiPerfil,
+        beforeEnter: (to, from, next) => {
+            const user = auth.currentUser;
+            if (user) {
+                const db = getDatabase();
+                const userRef = ref(db, 'users/' + user.uid);
+                
+                get(userRef).then((snapshot) => {
+                if (snapshot.exists()) {
+                    const userData = snapshot.val();
+                    if (userData.isActive === 'true') {
+                    next(); // Permitir acceso si es admin
+                    } else {
+                    alert('Acceso denegado. tu cuenta no esta habilitada.');
+                    next('/login'); // Redirigir a login
+                    }
+                } else {
+                    next('/login');
+                }
+                });
+            } else {
+                next('/login'); // Redirigir a login si no hay usuario autenticado
+            }
+        }
     },
     {
         path: '/visualizarUsuarios',
