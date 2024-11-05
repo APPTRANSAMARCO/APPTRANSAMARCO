@@ -4,11 +4,11 @@
         <div class="container-crud">
             <div class="d-flex w-100 justify-content-between align-items-center" style="padding: 0 20px;">
                 <h1 class="m-4">Lista de Usuarios</h1>
-                <button class="btn btn-warning btn-sm" style="margin:auto 0; height: 40px;">
+                <button class="btn btn-warning btn-sm" style="margin:auto 0; height: 50px;">
                     <router-link to="/adminRegister" style="text-decoration:none; color:black;">Crear Usuario/Admin</router-link>
                 </button>
             </div>
-            <div>
+            <div class="table-responsive">
                 <table class="table table-dark table-striped mt-4">
                     <thead>
                         <tr>
